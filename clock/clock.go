@@ -6,41 +6,27 @@ import "fmt"
 // clock_test.go.
 const testVersion = 4
 
-type Clock struct {
-	h, m int
-}
+const minutesPerDay = 24 * 60
 
+// Clock represents a clock that handles time without date.
+type Clock int
+
+// New creates a new clock.
 func New(hour, minute int) Clock {
-	m := minute % 60
-	extraH := minute / 60
+	m := (hour*60 + minute) % minutesPerDay
 	if m < 0 {
-		m = 60 + m
-		extraH -= 1
+		m += minutesPerDay
 	}
-	hour += extraH
-	h := hour % 24
-	if h < 0 {
-		h = 24 + h
-	}
-	return Clock{h, m}
+	return Clock(m)
 }
 
+// String returns a string representation of the clock.
 func (c Clock) String() string {
-	var buf = [4]int{0,0,0,0}
-	fmtN(c.h, buf[:2])
-	fmtN(c.m, buf[2:])
-	return fmt.Sprintf("%d%d:%d%d", buf[0], buf[1], buf[2], buf[3])
+	h := c / 60
+	return fmt.Sprintf("%02d:%02d", h, c-h*60)
 }
 
+// Add creates a new clock that is `minute` ahead from this one.
 func (c Clock) Add(minutes int) Clock {
-	return New(c.h, c.m + minutes)
-}
-
-func fmtN(n int, buf []int) {
-	if n < 10 {
-		buf[1] = n
-	} else {
-		buf[0] = n / 10
-		buf[1] = n % 10
-	}
+	return New(0, int(c)+minutes)
 }
