@@ -10,8 +10,8 @@ func Distance(a, b string) (int, error) {
 		return -1, fmt.Errorf("different length: %d vs %d", len(a), len(b))
 	}
 	var distance int
-	for n := range a {
-		if a[n] != b[n] {
+	for n, c := range []byte(a) {
+		if c != b[n] {
 			distance++
 		}
 	}
