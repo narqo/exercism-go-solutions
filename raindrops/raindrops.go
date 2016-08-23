@@ -4,12 +4,6 @@ import "strconv"
 
 const testVersion = 2
 
-var nToDrop = map[int]string{
-	3: "Pling",
-	5: "Plang",
-	7: "Plong",
-}
-
 func Convert(n int) string {
 	var s string
 	if n%3 == 0 {
