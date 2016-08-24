@@ -2,28 +2,19 @@ package bob
 
 import "strings"
 
-const testVersion = 2 // same as targetTestVersion
+const testVersion = 2
 
+// Hey returns Bob's answer to msg.
 func Hey(msg string) string {
-	str := strings.TrimSpace(msg)
-	if len(str) == 0 {
+	msg = strings.TrimSpace(msg)
+	if len(msg) == 0 {
 		return "Fine. Be that way!"
 	}
-	if !onlyNums(str) && strings.ToUpper(str) == str {
+	if strings.ToUpper(msg) == msg && strings.ToLower(msg) != msg {
 		return "Whoa, chill out!"
 	}
-	if strings.HasSuffix(str, "?") {
+	if strings.HasSuffix(msg, "?") {
 		return "Sure."
 	}
 	return "Whatever."
-}
-
-func onlyNums(str string) bool {
-	normalized := strings.Map(func(r rune) rune {
-		if r < 65 {
-			return -1
-		}
-		return r
-	}, str)
-	return len(normalized) == 0
 }
