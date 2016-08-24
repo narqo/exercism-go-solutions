@@ -5,18 +5,18 @@ import "math"
 const testVersion = 2
 
 // Kind represents a possible kind of the triangle
-type Kind uint8
+type Kind int
 
 const (
-	NaT = iota // not a triangle
-	Equ        // equilateral
-	Iso        // isosceles
-	Sca        // scalene
+	NaT Kind = iota // not a triangle
+	Equ             // equilateral
+	Iso             // isosceles
+	Sca             // scalene
 )
 
 // KindFromSides returns  if the triangle is equilateral, isosceles, or scalene.
 func KindFromSides(a, b, c float64) Kind {
-	if !isTriangle(a, b, c) {
+	if !isPossibleTriangle(a, b, c) {
 		return NaT
 	}
 	if a == b && b == c {
@@ -28,7 +28,7 @@ func KindFromSides(a, b, c float64) Kind {
 	return Sca
 }
 
-func isTriangle(a, b, c float64) bool {
+func isPossibleTriangle(a, b, c float64) bool {
 	switch {
 	case a <= 0 || b <= 0 || c <= 0:
 		return false
@@ -36,12 +36,6 @@ func isTriangle(a, b, c float64) bool {
 		return false
 	case math.IsInf(a, 0) || math.IsInf(b, 0) || math.IsInf(c, 0):
 		return false
-	case a+b < c:
-		return false
-	case a+c < b:
-		return false
-	case b+c < a:
-		return false
 	}
-	return true
+	return a+b >= c && a+c >= b && b+c >= a
 }
